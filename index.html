@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Selamat Ulang Tahun Sayang ❤️</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/playfair-display@5.0.8/index.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/inter@5.0.8/index.css">
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <style>
+        :root {
+            --glass-bg: rgba(255, 255, 255, 0.08);
+            --glass-border: rgba(255, 255, 255, 0.18);
+            --glass-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
+            --text-primary: #ffffff;
+            --text-secondary: rgba(255, 255, 255, 0.85);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(-45deg, #fce4ec, #e1bee7, #c5cae9, #f8bbd0, #e1f5fe);
+            background-size: 400% 400%;
+            animation: gradientBG 20s ease infinite;
+            color: var(--text-primary);
+            overflow-x: hidden;
+            min-height: 100vh;
+            line-height: 1.6;
+        }
+
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        h1, h2, h3 { font-family: 'Playfair Display', serif; font-weight: 600; }
+        
+        .glow-text {
+            text-shadow: 0 0 20px rgba(255,255,255,0.4), 0 0 40px rgba(255,182,193,0.3);
+        }
+
+        .glass {
+            background: var(--glass-bg);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            box-shadow: var(--glass-shadow);
+        }
+
+        #hearts-container {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            pointer-events: none; z-index: 0; overflow: hidden;
+        }
+        .falling-heart {
+            position: absolute; top: -10vh;
+            animation: fall linear forwards; opacity: 0.6;
+        }
+        @keyframes fall {
+            0% { transform: translateY(0) rotate(0deg); opacity: 0.6; }
+            100% { transform: translateY(110vh) rotate(360deg); opacity: 0; }
+        }
+
+        section {
+            position: relative; z-index: 1;
+            padding: 5rem 2rem; text-align: center;
+            max-width: 900px; margin: 0 auto;
+        }
+
+        #hero {
+            min-height: 100vh; display: flex; flex-direction: column;
+            justify-content: center; align-items: center;
+        }
+        #hero h1 { font-size: clamp(2.5rem, 7vw, 4.5rem); margin-bottom: 1rem; letter-spacing: -0.02em; }
+        #hero p { font-size: clamp(1rem, 2.5vw, 1.25rem); opacity: 0.9; font-weight: 300; }
+
+        .section-title { font-size: clamp(2rem, 5vw, 3rem); margin-bottom: 3rem; letter-spacing: -0.01em; }
+
+        /* Photo Grid */
+        .photo-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1.5rem;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+        .photo-item {
+            border-radius: 20px;
+            overflow: hidden;
+            aspect-ratio: 1 / 1;
+            position: relative;
+            transition: transform 0.4s ease, box-shadow 0.4s ease;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+        }
+        .photo-item:hover {
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 0 20px 40px rgba(255,105,180,0.4);
+        }
+        .photo-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.6s ease;
+        }
+        .photo-item:hover img {
+            transform: scale(1.08);
+        }
+        .photo-item::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, rgba(255,182,193,0.2), rgba(225,190,231,0.2));
+            pointer-events: none;
+        }
+
+        /* Letter */
+        .letter-container {
+            padding: 3rem 2.5rem; text-align: left;
+            font-size: clamp(1rem, 2vw, 1.15rem); line-height: 1.9;
+            font-weight: 300;
+        }
+        .cursor {
+            display: inline-block; width: 2px; height: 1.2em; background: #fff;
+            animation: blink 0.8s infinite; vertical-align: middle; margin-left: 2px;
+        }
+        @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
+
+        /* Interactive Button */
+        .glow-btn {
+            background: rgba(255,255,255,0.15); backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.3);
+            box-shadow: 0 0 20px rgba(255,182,193,0.3);
+            transition: all 0.3s ease; color: #fff;
+            font-family: 'Inter', sans-serif; cursor: pointer;
+            padding: 1rem 2.5rem; border-radius: 50px; font-size: 1.1rem;
+        }
+        .glow-btn:hover {
+            box-shadow: 0 0 30px rgba(255,182,193,0.6); transform: translateY(-3px);
+            background: rgba(255,255,255,0.25);
+        }
+        #interactive-btn { margin-top: 1rem; }
+
+        /* Modal */
+        .modal {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.4); display: flex; justify-content: center; align-items: center;
+            z-index: 1000; backdrop-filter: blur(8px);
+        }
+        .modal.hidden { display: none; }
+        .modal-content {
+            background: linear-gradient(135deg, rgba(252,228,236,0.95), rgba(225,190,231,0.95));
+            padding: 3rem 2rem; border-radius: 24px; max-width: 450px; width: 90%;
+            text-align: center; position: relative;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.2);
+            animation: popIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            color: #4a4a4a; font-size: 1.15rem; line-height: 1.6;
+        }
+        @keyframes popIn {
+            0% { transform: scale(0.8); opacity: 0; } 100% { transform: scale(1); opacity: 1; }
+        }
+        .close-btn {
+            position: absolute; top: 15px; right: 15px; font-size: 1.5rem; cursor: pointer;
+            color: #fff; background: rgba(255,105,180,0.6); width: 32px; height: 32px;
+            border-radius: 50%; display: flex; justify-content: center; align-items: center;
+            transition: background 0.3s;
+        }
+        .close-btn:hover { background: rgba(255,105,180,0.9); }
+
+        #music-toggle {
+            position: fixed; bottom: 25px; right: 25px; z-index: 100;
+            padding: 0.8rem 1.5rem; border-radius: 50px; font-size: 0.95rem;
+        }
+
+        .fade-in { opacity: 0; transform: translateY(20px); transition: opacity 0.8s ease, transform 0.8s ease; }
+        .fade-in.visible { opacity: 1; transform: translateY(0); }
+
+        @media (max-width: 768px) {
+            section { padding: 3rem 1.5rem; }
+            .photo-grid { grid-template-columns: 1fr; gap: 1.2rem; }
+            .photo-item { aspect-ratio: 4/3; }
+            .letter-container { padding: 2rem 1.5rem; }
+        }
+    </style>
+</head>
+<body>
+    <div id="hearts-container"></div>
+
+    <button id="music-toggle" class="glow-btn" onclick="toggleMusic()"> Putar Musik</button>
+    <audio id="bg-music" loop>
+        <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3" type="audio/mpeg">
+    </audio>
+
+    <section id="hero">
+        <h1 class="glow-text fade-in">Selamat Ulang Tahun Sayang ❤️</h1>
+        <p class="fade-in">Hari spesialmu, dan aku ingin membuatnya berkesan.</p>
+    </section>
+
+    <section id="photo-section">
+        <h2 class="section-title glow-text fade-in">Foto-foto Imutmu 🥰</h2>
+        <div class="photo-grid fade-in">
+            <div class="photo-item">
+                <img src="tari.jpeg" alt="Foto Imut 1">
+            </div>
+            <div class="photo-item">
+                <img src="tari2.jpeg" alt="Foto Imut 2">
+            </div>
+            <div class="photo-item">
+                <img src="tari3.jpeg" alt="Foto Imut 3">
+            </div>
+            <div class="photo-item">
+                <img src="tari1.jpeg" alt="Foto Imut 4">
+            </div>
+        </div>
+    </section>
+
+    <section id="letter-section">
+        <h2 class="section-title glow-text fade-in">Surat Untukmu</h2>
+        <div class="letter-container glass fade-in">
+            <span id="letter-content"></span><span class="cursor" id="typing-cursor"></span>
+        </div>
+    </section>
+
+    <section id="interactive-section">
+        <h2 class="section-title glow-text fade-in">Ada Sesuatu Untukmu</h2>
+        <button id="interactive-btn" class="glow-btn fade-in" onclick="showRandomMessage()">Klik Aku 💝</button>
+    </section>
+
+    <div id="message-modal" class="modal hidden">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeModal()">&times;</span>
+            <p id="modal-message"></p>
+        </div>
+    </div>
+
+    <script>
+        window.addEventListener('load', () => {
+            confetti({ particleCount: 100, spread: 60, origin: { y: 0.6 }, colors: ['#fce4ec', '#e1bee7', '#ffffff', '#f8bbd0'] });
+        });
+
+        const heartsContainer = document.getElementById('hearts-container');
+        const heartEmojis = ['❤️', '💕', '', ''];
+        function createFallingHeart() {
+            const heartElement = document.createElement('div');
+            heartElement.className = 'falling-heart';
+            heartElement.innerText = heartEmojis[Math.floor(Math.random() * heartEmojis.length)];
+            heartElement.style.left = Math.random() * 100 + 'vw';
+            const animDuration = Math.random() * 5 + 5;
+            heartElement.style.animationDuration = animDuration + 's';
+            heartElement.style.fontSize = (Math.random() * 1 + 0.8) + 'rem';
+            heartsContainer.appendChild(heartElement);
+            setTimeout(() => heartElement.remove(), animDuration * 1000);
+        }
+        setInterval(createFallingHeart, 600);
+
+        const bgMusic = document.getElementById('bg-music');
+        const musicToggleBtn = document.getElementById('music-toggle');
+        let isMusicPlaying = false;
+        function toggleMusic() {
+            if (isMusicPlaying) { bgMusic.pause(); musicToggleBtn.innerText = '🎵 Putar Musik'; } 
+            else { bgMusic.play().catch(e => console.log('Autoplay blocked:', e)); musicToggleBtn.innerText = '⏸ Hentikan Musik'; }
+            isMusicPlaying = !isMusicPlaying;
+        }
+
+        const loveLetterText = "Selamat ulang tahun cintaku. Terima kasih sudah hadir dalam hidupku dan menjadi alasan banyak senyumku setiap hari. Semoga di usia yang baru ini semua impianmu tercapai, kesehatan selalu menyertaimu, dan kebahagiaan tidak pernah meninggalkanmu. Aku bersyukur bisa mengenalmu dan berharap dapat terus menemanimu dalam setiap langkah kehidupan. Aku sayang kamu hari ini, besok, dan seterusnya. ❤️";
+        let typingCharIndex = 0;
+        let letterHasStarted = false;
+        const letterContentElement = document.getElementById('letter-content');
+        const typingCursorElement = document.getElementById('typing-cursor');
+        function typeLoveLetter() {
+            if (typingCharIndex < loveLetterText.length) {
+                letterContentElement.textContent += loveLetterText.charAt(typingCharIndex);
+                typingCharIndex++;
+                setTimeout(typeLoveLetter, 35);
+            } else { typingCursorElement.style.display = 'none'; }
+        }
+        const letterObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => { if (entry.isIntersecting && !letterHasStarted) { letterHasStarted = true; typeLoveLetter(); } });
+        }, { threshold: 0.3 });
+        letterObserver.observe(document.getElementById('letter-section'));
+
+        const sweetMessages = [
+            "Senang banget akhirnya bisa panggil kamu 'pacar'. 😊",
+            "Masih gak nyangka kamu mau sama aku. ",
+            "Setiap chat dari kamu selalu bikin aku senyum sendiri. 💕",
+            "Aku suka banget momen-momen kecil bareng kamu. 🌸",
+            "Kamu bikin hari-hariku jadi lebih berwarna. 🎨",
+            "Gak sabar buat nambah lebih banyak kenangan sama kamu. ⏳",
+            "Kamu itu spesial, jangan lupa ya. ",
+            "Terima kasih udah jadi alasan aku bahagia. 💌",
+            "Aku suka cara kamu ketawa. ",
+            "Semoga kita bisa terus sama-sama ya. 🤍"
+        ];
+        const messageModal = document.getElementById('message-modal');
+        const modalMessageElement = document.getElementById('modal-message');
+        function showRandomMessage() {
+            const randomMsg = sweetMessages[Math.floor(Math.random() * sweetMessages.length)];
+            modalMessageElement.innerText = randomMsg;
+            messageModal.classList.remove('hidden');
+            confetti({ particleCount: 40, spread: 40, origin: { y: 0.7 }, colors: ['#fce4ec', '#e1bee7', '#ffffff'] });
+        }
+        function closeModal() { messageModal.classList.add('hidden'); }
+        messageModal.addEventListener('click', (e) => { if (e.target === messageModal) closeModal(); });
+
+        const fadeObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('visible'); });
+        }, { threshold: 0.1 });
+        document.querySelectorAll('.fade-in').forEach(el => fadeObserver.observe(el));
+    </script>
+</body>
+</html>
+
